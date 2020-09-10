@@ -177,10 +177,40 @@ body {
   width: 100%;
   padding: 20px;
   display: flex;
+  flex-wrap: wrap;
   border-radius: 5px;
   box-shadow: 0 1px 6px -2px #000;
   background-color: #fff;
   margin-bottom: 30px;
+  transition: 0.3s all;
+  position: relative;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card .expandBtn {
+  margin-top: 20px;
+}
+
+.card .contributions {
+  width: 100%;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  transform: translateX(-100px);
+  opacity: 0;
+}
+
+div.contributions > div.position-relative {
+  padding-top: 30px;
+}
+
+div.contributions > div:nth-child(4) {
+  padding-bottom: 30px;
+}
+
+.card:hover {
+  transform: scale(1.1);
 }
 
 .card img {
@@ -188,6 +218,15 @@ body {
   height: 150px;
   border-radius: 3px;
   margin-right: 20px;
+  transition: 0.3s all;
+}
+
+.card:hover img {
+  border-radius: 20%;
+}
+
+.card .card-info {
+  width: 70%;
 }
 
 .card .name {

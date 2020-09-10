@@ -1,5 +1,6 @@
-// Import Axios
+// Import Dependencies
 import axios from "axios";
+import { gsap } from "gsap";
 
 /*
   STEP 1: using axios, send a GET request to the following URL
@@ -70,7 +71,7 @@ getFollowersData
     // Loop through all the followers data
     followersArray.forEach((user) => {
       // Get a new promise for each user
-      const newURL = `https://api.github.com/users/${user.login}`;
+      const newURL = user.url;
 
       // USe the data to insert to the dom
       axios.get(newURL).then((userData) => {
@@ -123,11 +124,15 @@ function cardMaker(user) {
   const cardFollowers = document.createElement("p");
   const cardFollowing = document.createElement("p");
   const cardBio = document.createElement("p");
+  const expandBtn = document.createElement("button");
+  const cardContributions = document.createElement("div");
 
   // Add attributes to card info elements
   cardInfoContainer.classList.add("card-info");
   cardName.classList.add("name");
   cardUserName.classList.add("username");
+  cardContributions.classList.add("contributions");
+  expandBtn.classList.add("expandBtn");
 
   // Add content to card-info elements
   cardName.textContent = user.name;
@@ -137,6 +142,8 @@ function cardMaker(user) {
   cardFollowers.textContent = `Followers: ${user.followers}`;
   cardFollowing.textContent = `Following: ${user.following}`;
   cardBio.textContent = `Bio: ${user.bio}`;
+  GitHubCalendar(cardContributions, user.login, { responsive: true });
+  expandBtn.textContent = "Click to Expand";
 
   // Create xtra inner HTML elements for certain pieces of info on the card info elements
   const cardProfileURL = document.createElement("a");
@@ -163,10 +170,24 @@ function cardMaker(user) {
   });
 
   // Insert all necessary childs into the main card container
-  const mainCardChildren = [userImg, cardInfoContainer];
+  const mainCardChildren = [userImg, cardInfoContainer, expandBtn, cardContributions];
 
   mainCardChildren.forEach((element) => {
     cardContainer.appendChild(element);
+  });
+
+  // Add an event listener to the expand button
+  expandBtn.addEventListener("click", (e) => {
+    cardContributions.classList.toggle("active");
+    expandBtn.textContent = cardContributions.classList.contains("active")
+      ? "Click to Collapse"
+      : "Click to Expand";
+
+    if (cardContributions.classList.contains("active")) {
+      gsap.to(cardContributions, { opacity: 1, height: "auto", x: 0, duration: 1 });
+    } else {
+      gsap.to(cardContributions, { opacity: 0, height: 0, x: -100, duration: 1 });
+    }
   });
 
   // Return the entire card element
@@ -181,3 +202,12 @@ function cardMaker(user) {
     luishrd
     bigknell
 */
+
+/********************************************
+ * Add some animation effects to loading site
+ ********************************************/
+
+window.addEventListener("load", function () {
+  gsap.from(".header", { opacity: 0, y: -100, duration: 1 });
+  gsap.from(".cards", { opacity: 0, y: 100, duration: 1 });
+});
