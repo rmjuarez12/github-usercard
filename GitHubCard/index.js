@@ -61,17 +61,22 @@ getFollowersData
     // Get the parent div to append to
     const cardParent = document.querySelector(".cards");
 
-    // Add a title separator
+    // Add a followers title heading
     const followersTitle = document.createElement("h2");
     followersTitle.textContent = "Followers";
     followersTitle.classList.add("followers-heading");
     cardParent.appendChild(followersTitle);
 
-    // Insert the followers in the DOM
+    // Loop through all the followers data
     followersArray.forEach((user) => {
-      const cardMakerFunction = cardMaker(user);
+      // Get a new promise for each user
+      const newURL = `https://api.github.com/users/${user.login}`;
 
-      cardParent.appendChild(cardMakerFunction);
+      // USe the data to insert to the dom
+      axios.get(newURL).then((userData) => {
+        const cardMakerFunction = cardMaker(userData.data);
+        cardParent.appendChild(cardMakerFunction);
+      });
     });
   })
   .catch((err) => console.log(err));
